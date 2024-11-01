@@ -1,33 +1,88 @@
 #Ho Kenneth Math 336.01 Homework 7 Code
 
 #Problem 1:
-#b)
 study_times = c(15.0, 10.0, 10.0, 15.0, 25.0, 7.0, 3.0, 8.0, 10.0, 
-                10.0, 11.0, 7.0, 5.0, 15.0, 7.5, 7.5, 12.0, 7.0, 
-                10.5, 6.0, 10.0, 7.5)
+                 10.0, 11.0, 7.0, 5.0, 15.0, 7.5, 7.5, 12.0, 7.0, 
+                 10.5, 6.0, 10.0, 7.5)
 
-qqnorm(study_times, main = "Normal Probability Plot of Study Times")
+# Part (b): Normal Probability Plot
+# Given study times in hours per week
+study_times = c(15.0, 10.0, 10.0, 15.0, 25.0, 7.0, 3.0, 8.0, 10.0, 
+                 10.0, 11.0, 7.0, 5.0, 15.0, 7.5, 7.5, 12.0, 7.0, 
+                 10.5, 6.0, 10.0, 7.5)
+
+# Part (b): Normal Probability Plot
+qqnorm(study_times, main = "Normal Probability Plot of Study Times", pch = 16)
 qqline(study_times, col = "red")
 
-#c)
-mean = mean(study_times)
-sd = sd(study_times)
-mn=NA
+# Part (c): Bootstrap Sample of Means
+set.seed(0)
+n = length(study_times)
+mn = numeric(1000)
 for(i in 1:1000){
-  x=rnorm(20, mean, sd)
-  mn[i]=mean(x)
+  x = sample(study_times, size = n, replace = TRUE)
+  mn[i] = mean(x)
 }
 hist(mn, main = "Frequency of Hours Studied per Week", col = "lightblue")
 
-#d)
-n = 22
+# Part (d): Bootstrap t Confidence Interval
+mean_study = mean(study_times)
 t_critical = qt(0.975, df = n - 1)
-bootstrap_sd = sd(bootstrap_means)
-ci_lower = mean_study - t_critical * (bootstrap_sd / sqrt(n))
-ci_upper = mean_study + bootstrap_margin_of_error
+bootstrap_sd = sd(mn)
+ci_lower = mean_study - t_critical * bootstrap_sd
+ci_upper = mean_study + t_critical * bootstrap_sd
+cat("95% Bootstrap t Confidence Interval:", ci_lower, "to", ci_upper, "\n")
 
-#e)
-percentile_ci_lower = quantile(mn, 0.025)
+# Part (e): Bootstrap Percentile Interval
+percentile_ci_lower <- quantile(mn, 0.025)
 percentile_ci_upper <- quantile(mn, 0.975)
+cat("95% Bootstrap Percentile Interval:", percentile_ci_lower, "to", percentile_ci_upper, "\n")
+
+
+#Problem 2:
+#Part (b: Probability Plot)
+game_durations = c(168, 187, 161, 205, 162, 183, 186, 190, 136, 177,
+                    182, 185, 185, 194, 169, 151, 192, 181, 194, 162,
+                    194, 171, 172, 168, 174)
+
+qqnorm(game_durations, main = "Normal Probability Plot of Game Durations")
+qqline(game_durations, col = "red")
+
+# Part (c): Bootstrap Sample of Means
+set.seed(0)
+n = length(game_durations)
+mn = numeric(1000)
+for(i in 1:1000){
+  x = sample(game_durations, size = n, replace = TRUE)
+  mn[i] = mean(x)
+}
+
+# Part (d): Bootstrap t Confidence Interval
+mean_game = mean(game_durations)
+t_critical = qt(0.975, df = n - 1)
+bootstrap_sd = sd(mn)
+ci_lower = mean_game - t_critical * bootstrap_sd
+ci_upper = mean_game + t_critical * bootstrap_sd
+cat("95% Bootstrap t Confidence Interval:", ci_lower, "to", ci_upper, "\n")
+
+# Part (e): Bootstrap Percentile Interval
+percentile_ci_lower <- quantile(mn, 0.025)
+percentile_ci_upper <- quantile(mn, 0.975)
+cat("95% Bootstrap Percentile Interval:", percentile_ci_lower, "to", percentile_ci_upper, "\n")
+
+
+#Problem 7
+#Part (b): Sample Size based on pwr
+library(pwr)
+
+# Define parameters
+effect_size = 5 / 7.5  # Calculate effect size (difference between means / standard deviation)
+alpha = 0.05  # Significance level
+power = 0.90  # Desired power level
+
+# Calculate the required sample size
+sample_size = pwr.t.test(d = effect_size, sig.level = alpha, power = power, type = "one.sample", alternative = "two.sided")
+print(sample_size)
+
 
 
