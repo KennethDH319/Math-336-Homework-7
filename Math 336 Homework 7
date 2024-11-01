@@ -1,9 +1,33 @@
 #Ho Kenneth Math 336.01 Homework 7 Code
 
+#Problem 1:
+#b)
+study_times = c(15.0, 10.0, 10.0, 15.0, 25.0, 7.0, 3.0, 8.0, 10.0, 
+                10.0, 11.0, 7.0, 5.0, 15.0, 7.5, 7.5, 12.0, 7.0, 
+                10.5, 6.0, 10.0, 7.5)
 
+qqnorm(study_times, main = "Normal Probability Plot of Study Times")
+qqline(study_times, col = "red")
+
+#c)
+mean = mean(study_times)
+sd = sd(study_times)
 mn=NA
 for(i in 1:1000){
-  x=rnorm(20,8,2)
+  x=rnorm(20, mean, sd)
   mn[i]=mean(x)
 }
-hist(mn, main = "Frequency of Hours Studied per Week")
+hist(mn, main = "Frequency of Hours Studied per Week", col = "lightblue")
+
+#d)
+n = 22
+t_critical = qt(0.975, df = n - 1)
+bootstrap_sd = sd(bootstrap_means)
+ci_lower = mean_study - t_critical * (bootstrap_sd / sqrt(n))
+ci_upper = mean_study + bootstrap_margin_of_error
+
+#e)
+percentile_ci_lower = quantile(mn, 0.025)
+percentile_ci_upper <- quantile(mn, 0.975)
+
+
