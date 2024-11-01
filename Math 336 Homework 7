@@ -1,0 +1,9 @@
+#Ho Kenneth Math 336.01 Homework 7 Code
+
+
+mn=NA
+for(i in 1:1000){
+  x=rnorm(20,8,2)
+  mn[i]=mean(x)
+}
+hist(mn, main = "Frequency of Hours Studied per Week")
